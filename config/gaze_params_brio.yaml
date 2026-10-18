@@ -1,0 +1,30 @@
+# ==============================================================================
+# BRONE GAZE NODE CONFIGURATION: LOGITECH BRIO (BASELINE LEGACY)
+# Digunakan untuk: Baseline pengujian kamera Logitech BRIO eksisting.
+# Penanggung Jawab Domain: Mas Evan (Gaze Lead)
+# Dikelola oleh: Systems & OS Engineer
+# ==============================================================================
+
+algo_gaze_node:
+  ros__parameters:
+    # --- Input Stream ---
+    image_topic: "/camera/color/image_raw"
+    
+    # --- Karakteristik Optik Sensor ---
+    camera_hfov_deg: 78.0             # Horizontal FOV resmi Logitech Brio
+    
+    # --- Parameter Kelembutan Kontrol Leher ---
+    servo_alpha: 0.30                 # Filter kelembutan gerak motor leher
+    alpha_coord: 0.15                 # Filter koordinat wajah (peredam jitter)
+    pixel_deadband: 16                # Toleransi piksel tengah (leher diam saat wajah stabil)
+    ramp_duration: 0.3                # Waktu akselerasi awal (detik)
+    
+    # --- Batas Keamanan Sudut Leher (Radian) ---
+    pan_limit_min: -1.4               # Batas putar kiri (~80 derajat)
+    pan_limit_max: 1.4                # Batas putar kanan (~80 derajat)
+    tilt_range_up: 0.35               # Batas mendongak ke atas
+    tilt_range_down: 0.80             # Batas menunduk ke bawah
+    
+    # --- Beban Komputasi ---
+    process_every_n_frames: 2         # Frame skipping untuk menghemat CPU NUC
+    yolo_conf_threshold: 0.50         # Ambang batas deteksi orang

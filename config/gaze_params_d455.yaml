@@ -1,0 +1,32 @@
+# ==============================================================================
+# BRONE GAZE NODE CONFIGURATION: INTEL REALSENSE D455 (NEXT-GEN TARGET)
+# Digunakan untuk: Transisi kamera depth Intel RealSense D455 di NVIDIA Jetson.
+# Penanggung Jawab Domain: Mas Evan (Gaze Lead)
+# Dikelola oleh: Systems & OS Engineer
+# ==============================================================================
+
+algo_gaze_node:
+  ros__parameters:
+    # --- Input Stream (Standar HAL - Identik dengan Brio) ---
+    image_topic: "/camera/color/image_raw"
+    
+    # --- Karakteristik Optik Sensor Baru ---
+    camera_hfov_deg: 86.0             # Horizontal FOV resmi Intel RealSense D455 (Lebih Lebar!)
+    
+    # --- Parameter Kelembutan Kontrol Leher (Dioptimasi untuk 30 FPS) ---
+    # Karena GPU Jetson TensorRT berjalan di 30 FPS stabil, filter peredam bisa dilonggarkan
+    # sehingga leher robot menoleh lebih gesit, responsif, dan manusiawi tanpa gemetar!
+    servo_alpha: 0.45                 # Lebih gesit dibanding Brio (0.30)
+    alpha_coord: 0.40                 # Deteksi koordinat lebih responsif (naik dari 0.15)
+    pixel_deadband: 16                # Tetap dipertahankan untuk kestabilan
+    ramp_duration: 0.2                # Akselerasi leher lebih cepat
+    
+    # --- Batas Keamanan Sudut Leher (Radian) ---
+    pan_limit_min: -1.4
+    pan_limit_max: 1.4
+    tilt_range_up: 0.35
+    tilt_range_down: 0.80
+    
+    # --- Beban Komputasi di GPU Ampere Jetson ---
+    process_every_n_frames: 1         # Full 30 FPS! Tidak perlu skipping frame lagi di Jetson
+    yolo_conf_threshold: 0.50
