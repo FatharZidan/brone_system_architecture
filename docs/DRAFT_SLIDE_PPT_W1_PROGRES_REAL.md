@@ -1,120 +1,98 @@
-# 📊 DRAF SLIDE PRESENTASI PROGRES SISTEM ROBOT BRONE (W1)
+# 📊 DRAF SLIDE PRESENTASI W1 (VERSI RINGKAS & PUNCHY)
 **Presenter:** Systems, OS, Middleware, & Integration Engineer  
-**Fokus:** Kilas Balik Evaluasi, Progres Nyata Arsitektur & Git, serta Kesiapan Infrastruktur LLM  
 
 ---
 
-## 🏷️ SLIDE 1: KILAS BALIK & PENYELARASAN BATASAN KERJA (REFOCUSING)
+## 🏷️ SLIDE 1: KILAS BALIK & BATASAN KERJA (REFOCUSING)
 
 ### 🖥️ Tampilan Layar (On-Slide):
-* **Prinsip Utama:** *Zero-Risk Integration & Modularity Isolation*
-* **Penyelarasan Peran Sesuai Evaluasi:**
-  * Fokus murni pada **Infrastruktur OS, Middleware ROS 2, Hardware Abstraction, & Kontrak Data (ICD)**.
-  * **Tidak mencampuri logika internal modul:** Algoritma Gaze (Mas Evan) dan kendali roda (Tim SDSC) sepenuhnya berada di ranah pemilik modul.
-  * SOP dan file operasional robot legacy (`brone_main_ws`) tetap **100% utuh tanpa diubah**.
-* **Tujuan Akhir:** Menyediakan fondasi sistem yang stabil, aman dari crash USB/resource, dan siap menerima integrasi tanpa merusak kode yang sudah jalan.
-
-> 🎙️ **Speaker Notes (Apa yang Diucapkan):**  
-> *"Selamat pagi/siang rekan-rekan dan ketua. Mengawali laporan progres kali ini, saya ingin menegaskan kembali komitmen penyelarasan peran saya sebagai Systems & Integration Engineer. Berdasarkan evaluasi sebelumnya, saya membatasi ruang lingkup secara disiplin: tidak mencampuri atau mengubah algoritma internal rekan-rekan sub-tim, baik Gaze Tracking Mas Evan maupun kendali roda SDSC. Seluruh konfigurasi sistem legacy yang sudah berjalan di robot dijaga 100% utuh tanpa mengubah SOP harian. Fokus saya murni memastikan infrastruktur hardware, sistem operasi, middleware, dan jalur komunikasi data antar-modul berjalan stabil dan bebas konflik."*
-
----
-
-## 🏷️ SLIDE 2: KILAS BALIK AUDIT GROUND TRUTH (HARDWARE & REPO TIM)
-
-### 🖥️ Tampilan Layar (On-Slide):
-* **Verifikasi Hardware Robot:**
-  * Kamera terpasang di leher BRONE: **Intel RealSense D455** (RGB-D Hardware Stereo Depth).
-* **Inspeksi Repositori Rekan Tim:**
-  * **Modul Gaze (Mas Evan):** Gaze baru (YOLOv11 + MediaPipe + Fuzzy) sedang dalam tahap pengembangan lokal Mas Evan untuk skripsi; robot BRONE saat ini masih menjalankan versi legacy.
-  * **Modul SDSC (`SDSC-Omniwheel`):** Terkonfirmasi menggunakan *Social Force Model* & *Proxemic Zones* (Emergency Stop di jarak $<0.45\text{ m}$, pelambatan 30% di $<1.20\text{ m}$; tidak ada auto-stop 1m palsu).
-* **Kesimpulan:** Seluruh keputusan arsitektur disandarkan pada kode dan hardware nyata, bukan asumsi sepihak.
+* **Prinsip Utama:** *Zero-Risk Integration* (Aman, tidak merusak sistem berjalan)
+* **Fokus Peran:** Murni pada OS, Middleware ROS 2, & Kontrak Data
+* **Batasan Jelas:** Algoritma internal (Gaze & Roda) 100% milik sub-tim
+* **SOP Robot:** Sistem legacy (`brone_main_ws`) tetap utuh tanpa perubahan
 
 > 🎙️ **Speaker Notes:**  
-> *"Sebagai kilas balik kedua, kami melakukan verifikasi fakta lapangan secara langsung. Pertama, kamera fisik robot terkonfirmasi adalah Intel RealSense D455 yang memiliki ASIC depth hardware mandiri. Kedua, dari penelusuran repositori, sistem Gaze baru Mas Evan saat ini masih berjalan di environment development miliknya untuk skripsi, sehingga NUC masih aman menjalankan sistem legacy. Ketiga, kami menginspeksi repositori SDSC-Omniwheel secara langsung untuk menyelaraskan parameter: sistem mereka menggunakan model Proxemic Zones dengan rem darurat di 0.45 meter dan perlambatan di 1.2 meter. Dengan memastikan fakta ini, kita tidak membuat asumsi-asumsi sepihak yang membingungkan integrasi."*
+> *"Sesuai hasil evaluasi, peran saya terfokus murni pada arsitektur OS, middleware, dan jalur komunikasi data. Logika algoritma Mas Evan dan SDSC tidak dicampuri, dan sistem operasional robot yang ada tetap aman 100% tanpa diubah."*
 
 ---
 
-## 🏷️ SLIDE 3: PROGRES NYATA 1 — REPOSITORI RESMI & OVERLAY WORKSPACE AMAN
+## 🏷️ SLIDE 2: KILAS BALIK AUDIT GROUND TRUTH (HARDWARE & REPO)
 
 ### 🖥️ Tampilan Layar (On-Slide):
-* **Pembangunan Repositori Terpusat:**
-  * GitHub: `https://github.com/FatharZidan/brone_system_architecture`
-  * Berisi launch files, parameter YAML, dokumen ICD, dan utilitas hardware.
-* **Metode Deployment: Isolated ROS 2 Overlay Workspace**
-  * Di-clone di NUC robot pada direktori mandiri: `~/brone_arch_ws/src/`.
-  * **100% Zero-Risk:** Tidak menyentuh workspace utama `~/brone_main_ws` dan tidak memodifikasi `~/.bashrc`.
-  * Begitu terminal SSH ditutup, robot otomatis kembali bersih ke konfigurasi bawaan tanpa jejak perubahan permanen.
+* **Kamera Leher:** Terverifikasi **Intel RealSense D455** (Hardware Stereo Depth)
+* **Modul Gaze (Mas Evan):** Gaze baru dikembangkan di dev lokal (belum masuk NUC)
+* **Modul Roda (SDSC):** Model *Proxemics* asli (Stop $<0.45\text{m}$, Slow $<1.2\text{m}$; bukan rem 1m)
+* **Landasan Integrasi:** Berpijak pada kode & hardware nyata, bukan asumsi
 
 > 🎙️ **Speaker Notes:**  
-> *"Masuk ke progres nyata yang sudah kami selesaikan: Kami telah membangun repositori arsitektur terpusat di GitHub bernama `brone_system_architecture`. Di robot NUC, kami mendemonstrasikan metode deployment berstandar industri menggunakan Isolated ROS 2 Overlay Workspace di `~/brone_arch_ws`. Keunggulan metode ini adalah zero-risk: kami sama sekali tidak menyentuh workspace lama `~/brone_main_ws` ataupun mengubah file konfigurasi sistem seperti `.bashrc`. Ketika sesi pengujian selesai dan terminal ditutup, robot tetap berada dalam kondisi semula. Ini menjamin pengujian arsitektur baru tidak akan pernah mengganggu jalannya demonstrasi harian robot."*
+> *"Kami memverifikasi langsung fakta di lapangan: sensor fisik adalah RealSense D455, Gaze baru Mas Evan masih di dev lokal, dan sistem SDSC memakai zona proxemics asli. Seluruh integrasi kita berpijak pada data nyata, bukan dugaan sepihak."*
 
 ---
 
-## 🏷️ SLIDE 4: PROGRES NYATA 2 — HARDWARE ABSTRACTION LAYER (CAMERA HAL)
+## 🏷️ SLIDE 3: PROGRES 1 — REPO PUSAT & OVERLAY WORKSPACE AMAN
 
 ### 🖥️ Tampilan Layar (On-Slide):
-* **Tantangan Fisik:**
-  * Port USB kamera RealSense di Linux hanya dapat dibuka oleh 1 proses (*Device Busy* jika diakses bersamaan oleh Gaze & SDSC).
-* **Solusi: `camera_hal.launch.py`**
-  * Driver kamera dijalankan **satu kali** sebagai node resmi ROS 2.
-  * Mendukung argumen fleksibel:
-    ```bash
-    ros2 launch brone_system_architecture camera_hal.launch.py camera_type:=d455
-    ```
-  * Mem-publish topik standar:
-    * `/camera/color/image_raw` $\rightarrow$ untuk pengolahan visi/Gaze Mas Evan.
-    * `/camera/depth/image_rect_raw` $\rightarrow$ untuk obstacle avoidance Tim SDSC.
-* **Dampak:** Mas Evan dan Tim SDSC dapat membaca frame kamera secara bersamaan tanpa tabrakan port USB.
+* **Repositori Resmi:** [`brone_system_architecture`](https://github.com/FatharZidan/brone_system_architecture) di GitHub
+* **Metode Deployment:** Isolated ROS 2 Overlay di `~/brone_arch_ws/`
+* **Zero-Risk:** Tanpa menyentuh `brone_main_ws` dan tanpa ubah `.bashrc`
+* **Jaminan:** Terminal SSH ditutup $\rightarrow$ robot otomatis kembali standar pabrik
 
 > 🎙️ **Speaker Notes:**  
-> *"Progres nyata kedua adalah modul Camera Hardware Abstraction Layer (HAL). Sebelumnya, jika dua program berbeda mencoba mengakses RealSense secara langsung lewat OpenCV atau pyrealsense2, Linux akan melempar error 'Device or Resource Busy'. Melalui `camera_hal.launch.py`, kami mengabstraksi kamera ke dalam node ROS 2 tunggal. Kamera cukup dibuka satu kali, lalu datanya dipancarkan ke topik standar ROS 2. Mas Evan bisa mengambil data warna RGB untuk deteksi wajah, dan rekan-rekan SDSC bisa mengambil data depth untuk penghindaran halangan secara simultan tanpa konflik perangkat keras."*
+> *"Kami membangun repositori resmi di GitHub dan menerapkannya di NUC menggunakan metode Isolated ROS 2 Overlay. Metode ini zero-risk: begitu terminal ditutup, sistem robot otomatis kembali bersih ke kondisi semula tanpa merusak operasional harian."*
 
 ---
 
-## 🏷️ SLIDE 5: PROGRES NYATA 3 — EKSTERNALISASI KONFIGURASI PARAMETER (YAML)
+## 🏷️ SLIDE 4: PROGRES 2 — CAMERA HARDWARE ABSTRACTION (HAL)
 
 ### 🖥️ Tampilan Layar (On-Slide):
-* **Eliminasi Hardcoded Values:**
-  * Parameter operasional dipisahkan dari script kode sumber ke file YAML eksternal:
-    * `config/gaze_params_d455.yaml` (RealSense D455)
-    * `config/gaze_params_brio.yaml` (Logitech Brio)
-* **Manfaat Operasional:**
-  * Pengaturan resolusi ($640 \times 480$), target frame rate ($30\text{ fps}$), field of view ($86^\circ$), serta batas mekanik pergerakan leher dapat diatur langsung via file konfigurasi.
-  * Memudahkan tuning saat robot berganti pencahayaan atau sensor tanpa perlu menyentuh atau me-recompile kode program pengembang.
+* **Masalah:** Port USB kamera crash (*Device Busy*) jika dibuka bersamaan oleh Gaze & SDSC
+* **Solusi (`camera_hal.launch.py`):** Kamera dibuka 1 kali di ROS 2, disiarkan ke:
+  * `/camera/color/image_raw` $\rightarrow$ untuk Visi/Gaze Mas Evan
+  * `/camera/depth/image_rect_raw` $\rightarrow$ untuk Obstacle Avoidance SDSC
+* **Hasil:** Gaze dan SDSC berbagi data kamera bersamaan tanpa tabrakan USB
 
 > 🎙️ **Speaker Notes:**  
-> *"Progres nyata ketiga adalah perapian konfigurasi parameter. Selama ini banyak parameter sensor dan pergerakan leher tertanam mati di dalam kode program (hardcoded). Kami menyediakan konfigurasi eksternal berbasis file YAML untuk RealSense D455 dan Logitech Brio. Melalui parameter file ini, batas sudut mekanik leher, target FPS, dan FOV kamera dapat disesuaikan dengan cepat di lapangan tanpa harus mengedit script Python pengembang. Ini membuat pemeliharaan sistem jauh lebih rapi dan aman dari bug sintaks saat uji coba di lapangan."*
+> *"Untuk mencegah crash colokan USB saat kamera diakses bersamaan oleh Gaze dan SDSC, kami buat Camera HAL. Kamera dinyalakan satu kali oleh ROS 2, lalu videonya disiarkan sehingga Mas Evan dan tim SDSC bisa memakai gambar yang sama tanpa konflik hardware."*
 
 ---
 
-## 🏷️ SLIDE 6: PROGRES NYATA 4 — INTERFACE CONTROL DOCUMENT (ICD v1.0)
+## 🏷️ SLIDE 5: PROGRES 3 — PARAMETER BEBAS HARDCODE (YAML)
 
 ### 🖥️ Tampilan Layar (On-Slide):
-* **Standardisasi Antarmuka Sistem:**
-  * Dokumen resmi: `docs/BRONE_INTERFACE_CONTROL_DOCUMENT_ICD.md`.
-  * Menetapkan kontrak antarmuka komunikasi antar-komputer (Jetson $\leftrightarrow$ NUC $\leftrightarrow$ Base):
-    * **Topik Visi:** `/camera/color/image_raw` & `/camera/depth/image_rect_raw`
-    * **Topik Target Orang:** `/brone/target_person` (`geometry_msgs/PointStamped`)
-    * **Topik Motor Leher:** `/robotis/head_control/set_joint_states` (`sensor_msgs/JointState`)
-    * **Topik Roda Base:** `/cmd_vel` (`geometry_msgs/Twist`)
-* **Dampak Positif:** Menghilangkan kebingungan antar-subtim; setiap pengembang tahu persis input/output modulnya tanpa saling menduga-duga.
+* **Konfigurasi Eksternal:** `gaze_params_d455.yaml` & `gaze_params_brio.yaml`
+* **Tuning Praktis:** Resolusi ($640\times480$), target FPS ($30$), FOV ($86^\circ$), & limit sudut leher
+* **Bebas Bongkar Kode:** Kalibrasi sensor di lapangan tanpa edit script Python pengembang
+* **Hasil:** Pemeliharaan rapi dan aman dari risiko bug sintaks
 
 > 🎙️ **Speaker Notes:**  
-> *"Progres nyata keempat adalah penyusunan dokumen Interface Control Document atau ICD v1.0. Dokumen ini menjadi kontrak kerja sama resmi antar-subtim di Robot BRONE. ICD memetakan nama topik, tipe data, frekuensi transmisi, dan batasan nilai numerik yang disepakati—mulai dari output visi leher hingga perintah gerak roda. Dengan adanya ICD ini, Mas Evan, Tim SDSC, dan saya memiliki referensi antarmuka yang transparan, sehingga proses integrasi tidak lagi bergantung pada asumsi verbal."*
+> *"Parameter sensor dan batas sudut mekanik leher kami pisahkan ke file konfigurasi YAML. Jadi saat kalibrasi di lapangan, kita cukup ubah angka di file config tanpa perlu membongkar atau mengedit kodingan Python pengembang."*
 
 ---
 
-## 🏷️ SLIDE 7: RENCANA MINGGU INI (W1) — DUKUNGAN INFRASTRUKTUR LLM & NEXT STEPS
+## 🏷️ SLIDE 6: PROGRES 4 — INTERFACE CONTROL DOCUMENT (ICD v1.0)
 
 ### 🖥️ Tampilan Layar (On-Slide):
-* **Status Modul Visi:**
-  * Infrastruktur HAL dan overlay workspace telah siap; tinggal menunggu kesiapan Mas Evan untuk mendemokan / men-deploy modul vision barunya ke robot.
-* **Agenda Utama Minggu Ini (W1 Transition):**
-  * **Rancang Bangun Infrastruktur Sub-Tim LLM / Voice Pipeline:**
-    * Pemetaan resource alokasi CPU & VRAM di Intel NUC untuk Local LLM / Whisper / TTS.
-    * Standarisasi *Audio Hardware Abstraction* (USB mic array & speaker output) agar tidak bentrok dengan pipeline audio BOS v4.0.
-    * Perancangan arsitektur event-driven bridge antara respon LLM dan ekspresi/gerakan robot.
-* **Target:** Fondasi sistem komputasi tetap stabil saat beban pipeline komputasi bahasa mulai masuk ke robot.
+* **Kontrak Data Resmi:** Dokumen `BRONE_INTERFACE_CONTROL_DOCUMENT_ICD.md`
+* **Standardisasi Topik:**
+  * Topik Kamera: `/camera/...`
+  * Topik Motor Leher: `/robotis/head_control/set_joint_states`
+  * Topik Gerak Roda: `/cmd_vel`
+* **Manfaat:** Antarmuka transparan; hilangkan miskomunikasi & dependensi liar antar-subtim
 
 > 🎙️ **Speaker Notes:**  
-> *"Untuk rencana kerja minggu ini di fase W1: Dari sisi visi, seluruh infrastruktur pembungkus dan kontrak antarmuka sudah siap di robot, sehingga kami berada pada posisi siap mendampingi begitu Mas Evan hendak menguji coba modul Gaze barunya di BRONE. Selanjutnya, agenda prioritas saya minggu ini adalah mulai membantu merancang infrastruktur pendukung untuk tim LLM dan interaksi suara. Mengingat model bahasa dan speech-to-text menuntut komputasi memori yang cukup intensif di NUC, saya akan memetakan pembagian resource CPU/VRAM serta mengabstraksi hardware audio (mic dan speaker) agar pipeline percakapan dapat terintegrasi mulus tanpa menimbulkan latency atau crash di sistem operasi. Terima kasih, saya siap menerima masukan dari ketua dan rekan-rekan."*
+> *"Kami menyusun dokumen ICD sebagai kontrak data resmi antar-subtim. Format data, frekuensi, dan batasan nilai numerik disepakati bersama, sehingga Mas Evan, SDSC, dan saya punya acuan yang jelas tanpa saling menduga."*
+
+---
+
+## 🏷️ SLIDE 7: RENCANA MINGGU INI (W1) — DUKUNGAN INFRASTRUKTUR LLM
+
+### 🖥️ Tampilan Layar (On-Slide):
+* **Status Visi:** Infrastruktur HAL siap; standby menunggu Mas Evan deploy modulnya
+* **Fokus Minggu Ini (W1 Transition):**
+  * **Alokasi Resource NUC:** Manajemen beban CPU & RAM (Ollama + Whisper + TTS)
+  * **Audio Abstraction:** Standarisasi colokan mic & speaker USB agar kebal crash
+  * **Bridge Telemetri:** Jalur komunikasi status percakapan LLM ke controller robot
+* **Target:** Fondasi komputasi tetap ringan & stabil saat pipeline suara aktif
+
+> 🎙️ **Speaker Notes:**  
+> *"Dari sisi visi, seluruh infrastruktur sudah siap dan standby. Di W1 ini fokus kami bergeser ke persiapan infrastruktur LLM di NUC: membagi kapasitas CPU/RAM dan menata jalur audio USB agar percakapan suara berjalan mulus tanpa membebani sistem operasi robot."*
