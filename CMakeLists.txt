@@ -7,12 +7,6 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 
-# Install executable scripts agar bisa dijalankan via: ros2 run brone_system_architecture <script>
-install(PROGRAMS
-  scripts/mock_target_publisher.py
-  DESTINATION lib/${PROJECT_NAME}
-)
-
 # Install launch files, configs, dan scripts ke share/brone_system_architecture
 install(DIRECTORY
   launch

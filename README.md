@@ -15,8 +15,8 @@ brone_system_architecture/
 ├── launch/
 │   └── camera_hal.launch.py       # Master launch file: Sakelar satu perintah Brio vs D455
 ├── scripts/
-│   ├── mock_target_publisher.py   # Test Harness: Simulator orang mendekat untuk uji rem 1.0 m SDSC & ZMP
 │   └── setup_opencr_udev.sh       # Skrip otomatisasi izin port OpenCR (Hapus kebutuhan 'sudo bash')
+├── docs/                          # Dokumen Arsitektur, ICD, Memo, dan Slide Presentasi
 └── README.md                      # Dokumentasi teknis & panduan operasional
 ```
 
@@ -37,19 +37,7 @@ ros2 launch brone_system_architecture camera_hal.launch.py camera_type:=d455
 
 ---
 
-#### 2. Uji Integrasi Rem Roda 1.0 Meter (Tanpa Perlu Kamera Fisik)
-Tim SDSC dan Tim Kinematika dapat menguji pengereman otomatis dan respon ZMP kapan saja di meja lab:
-
-```bash
-python3 brone_system_architecture/scripts/mock_target_publisher.py
-```
-*Output Terminal:*
-* `[APPROACH ZONE]` saat jarak orang $Z > 1.0\text{ m}$ (Roda diizinkan meluncur).
-* `[AUTO-STOP ACTIVE]` saat jarak orang $Z \le 1.0\text{ m}$ (Verifikasi apakah roda benar-benar berhenti diam $0.0\text{ m/s}$).
-
----
-
-#### 3. Menghilangkan Kebutuhan `sudo bash` di Terminal 1
+#### 2. Menghilangkan Kebutuhan `sudo bash` di Terminal 1
 Jalankan skrip ini sekali saja di Intel NUC:
 
 ```bash
